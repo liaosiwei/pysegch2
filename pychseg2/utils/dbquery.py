@@ -1,3 +1,4 @@
+# coding=UTF-8
 '''
 Created on 2013-7-29
 
@@ -28,7 +29,14 @@ class DatabaseQuery(object):
     
     def isbigram(self, field):
         res = self.filter('bigram', field)
-        return True if res else False
+        return True if res.fetchone() else False
+
+    def maxlengthbigram(self):
+        res = self.cur.execute("select max(length(Text)) from bigram")
+        return res.fetchone()[0]
+    
+    def quit(self):
+        self.conn.close()
             
 
 if __name__ == '__main__':
@@ -36,4 +44,6 @@ if __name__ == '__main__':
     res = t.filter('bigram', '无论如何')
     for row in res:
         print (row) 
-    print (t.isbigram("我们"))
+    print (t.isbigram("三后"))
+    print (t.maxlengthbigram())
+    t.quit()
