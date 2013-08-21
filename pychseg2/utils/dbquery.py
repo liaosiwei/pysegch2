@@ -47,3 +47,21 @@ if __name__ == '__main__':
     print (t.isbigram("三后"))
     print (t.maxlengthbigram())
     t.quit()
+
+class InMemQuery(DatabaseQuery):
+    def __init__(self, db_name):
+        super().__init__(db_name)
+        self.bigram_set = None
+        self.filter()
+        
+    def filter(self):
+        res = None
+        res = self.cur.execute("select Text from bigram")
+        l = res.fetchall()
+        self.bigram_set = set((word[0] for word in l))
+    
+    def isbigram(self, field):
+        return field in self.bigram_set
+        
+        
+        
